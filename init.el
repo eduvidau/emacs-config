@@ -25,3 +25,6 @@
 
 (setq org-directory "c:/Users/evida/notes/")
 (setq org-default-notes-file (concat org-directory "/notes.org"))
+
+;; Magit
+(use-package magit)
