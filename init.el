@@ -18,5 +18,10 @@
 
 (straight-use-package 'use-package)
 
-;;Org
-(use-package org)
+;; Org
+;; Not sure why default repo is wrong
+(straight-use-package
+ `(org :type git :repo "git://git.sv.gnu.org/emacs/org-mode.git" :local-repo "org" :depth full :pre-build (straight-recipes-org-elpa--build) :build (:not autoloads) :files (:defaults "lisp/*.el" ("etc/styles/" "etc/styles/*"))))
+
+(setq org-directory "c:/Users/evida/notes/")
+(setq org-default-notes-file (concat org-directory "/notes.org"))
