@@ -28,3 +28,6 @@
 
 ;; Magit
 (use-package magit)
+
+;; Start Server
+(server-start)
