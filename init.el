@@ -26,6 +26,10 @@
 (setq org-directory "c:/Users/evida/notes/")
 (setq org-default-notes-file (concat org-directory "/notes.org"))
 
+(global-set-key (kbd "C-c l") #'org-store-link)
+(global-set-key (kbd "C-c a") #'org-agenda)
+(global-set-key (kbd "C-c c") #'org-capture)
+
 ;; Magit
 (use-package magit)
 
