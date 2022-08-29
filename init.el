@@ -32,12 +32,13 @@
 (straight-use-package
  `(org :type git :repo "git://git.sv.gnu.org/emacs/org-mode.git" :local-repo "org" :depth full :pre-build (straight-recipes-org-elpa--build) :build (:not autoloads) :files (:defaults "lisp/*.el" ("etc/styles/" "etc/styles/*"))))
 
-(setq org-directory "c:/Users/evida/notes/")
+(setq org-directory "c:/Users/Lalo/notes/")
 (setq org-default-notes-file (concat org-directory "/notes.org"))
 
 (global-set-key (kbd "C-c l") #'org-store-link)
 (global-set-key (kbd "C-c a") #'org-agenda)
 (global-set-key (kbd "C-c c") #'org-capture)
+(global-set-key (kbd "C-c n") (lambda () (interactive) (find-file (symbol-value 'org-default-notes-file))))
 
 ;; Magit
 (use-package magit)
