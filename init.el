@@ -43,6 +43,9 @@
 ;; Magit
 (use-package magit)
 
+;; Elm
+(use-package elm-mode)
+
 ;; Start Server
 (server-start)
 (custom-set-variables
