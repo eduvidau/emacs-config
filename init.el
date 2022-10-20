@@ -1,5 +1,7 @@
 ;;Strait Package Manager
 
+(setq inhibit-startup-screen t)
+
 ;;Bootstraping code
 (defvar bootstrap-version)
 (let ((bootstrap-file
