@@ -67,6 +67,10 @@
 
 (elpaca-use-package elm-mode)
 
+;; Eglot
+
+(elpaca-use-package eglot)
+
 ;; Start Server
 
 (server-start)
