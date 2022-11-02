@@ -1,6 +1,19 @@
-;; Inhibit Startup Screen
+;; Basic config stuff
 
-(setq inibit-startup-screen t)
+(setq inibit-startup-screen t) ;; Inhibit Startup Screen
+
+(menu-bar-mode -1) ;; Disable Menu bar
+
+(setq visible-bell t) ;; Flash instead of ping
+
+(column-number-mode t) ;; Global colum-number-mode
+(global-display-line-numbers-mode t) ;;Display line numbers
+
+(dolist (mode '(org-mode-hook ;;Don't display line numbers
+		 term-mode-hook
+		 shell-mode-hook
+		 eshell-mode-hook))
+	 (add-hook mode (lambda () (display-line-number-mode 0))))
 
 ;; Elpaca Package Manager
 
@@ -63,6 +76,10 @@
 
 (elpaca-use-package magit)
 
+;; Company-mode
+
+(elpaca-use-package company)
+
 ;; Elm
 
 (elpaca-use-package elm-mode)
@@ -70,6 +87,10 @@
 ;; Eglot
 
 (elpaca-use-package eglot)
+
+;; Modes based on file ending
+
+
 
 ;; Start Server
 
