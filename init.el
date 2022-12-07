@@ -3,7 +3,7 @@
 (setq inhibit-startup-screen t) ;; Inhibit Startup Screen
 
 (menu-bar-mode -1) ;; Disable Menu bar
-
+(tool-bar-mode -1) ;; Disable tool bar
 (setq visible-bell t) ;; Flash instead of ping
 
 (column-number-mode t) ;; Global colum-number-mode
@@ -14,6 +14,14 @@
 		shell-mode-hook
 		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-number-mode 0))))
+
+;; Move customazation variables to a seperate file and load it
+(setq custom-file (locate-user-emacs-file "custom-vars.el"))
+(load custom-file 'noerror 'nomessage)
+
+;;Keep files and other buffers upto date
+(setq global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
 
 ;; Elpaca Package Manager
 
@@ -62,7 +70,7 @@
 ;; Org
 (elpaca-use-package org
   :init
-  (setq org-directory "c:/Users/Lalo/notes/")
+  (setq org-directory "c:/Users/Lalo/org/")
   (setq org-default-notes-file (concat org-directory "/notes.org"))
   :bind
   ("C-c l" . org-store-link)
