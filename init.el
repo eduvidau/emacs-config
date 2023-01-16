@@ -23,6 +23,10 @@
 (setq global-auto-revert-mode 1)
 (setq global-auto-revert-non-file-buffers t)
 
+;;Backups
+(setq backup-directory  "c:/Users/Lalo/AppData/Roaming/.emacs.d/backups")
+(setq backup-directory-alist  `(("." . ,backup-directory)))
+
 ;; Elpaca Package Manager
 
 ;; Bootstrap Elpaca
