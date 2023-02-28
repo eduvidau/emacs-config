@@ -110,6 +110,11 @@
 (elpaca-use-package js2-mode
   :mode "\\.js\\'")
 
+;;EPUBS
+(elpaca-use-package nov
+  :mode ("\\.epub\\'" . nov-mode)
+  :config
+  (setq nov-unzip-program (executable-find "unzip")))
 ;; Start Server
 
 (server-start)
