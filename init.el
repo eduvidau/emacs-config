@@ -30,49 +30,59 @@
 ;; Elpaca Package Manager
 
 ;; Bootstrap Elpaca
-(declare-function elpaca-generate-autoloads "elpaca")
+(defvar elpaca-installer-version 0.2)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-(when-let ((elpaca-repo (expand-file-name "repos/elpaca/" elpaca-directory))
-           (elpaca-build (expand-file-name "elpaca/" elpaca-builds-directory))
-           (elpaca-target (if (file-exists-p elpaca-build) elpaca-build elpaca-repo))
-           (elpaca-url  "https://www.github.com/progfolio/elpaca.git")
-           ((add-to-list 'load-path elpaca-target))
-           ((not (file-exists-p elpaca-repo)))
-           (buffer (get-buffer-create "*elpaca-bootstrap*")))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil
+                              :files (:defaults (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(when-let ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+           (build (expand-file-name "elpaca/" elpaca-builds-directory))
+           (order (cdr elpaca-order))
+           ((add-to-list 'load-path (if (file-exists-p build) build repo)))
+           ((not (file-exists-p repo))))
   (condition-case-unless-debug err
-      (progn
-        (unless (zerop (call-process "git" nil buffer t "clone" elpaca-url elpaca-repo))
-          (error "%s" (list (with-current-buffer buffer (buffer-string)))))
-        (byte-recompile-directory elpaca-repo 0 'force)
-        (require 'elpaca)
-        (elpaca-generate-autoloads "elpaca" elpaca-repo)
-        (kill-buffer buffer))
-    ((error)
-     (delete-directory elpaca-directory 'recursive)
-     (with-current-buffer buffer
-       (goto-char (point-max))
-       (insert (format "\n%S" err))
-       (display-buffer buffer)))))
+      (if-let ((buffer (pop-to-buffer-same-window "*elpaca-installer*"))
+               ((zerop (call-process "git" nil buffer t "clone"
+                                     (plist-get order :repo) repo)))
+               (default-directory repo)
+               ((zerop (call-process "git" nil buffer t "checkout"
+                                     (or (plist-get order :ref) "--"))))
+               (emacs (concat invocation-directory invocation-name))
+               ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                     "--eval" "(byte-recompile-directory \".\" 0 'force)"))))
+          (progn (require 'elpaca)
+                 (elpaca-generate-autoloads "elpaca" repo)
+                 (kill-buffer buffer))
+        (error "%s" (with-current-buffer buffer (buffer-string))))
+    ((error) (warn "%s" err) (delete-directory repo 'recursive))))
 (require 'elpaca-autoloads)
 (add-hook 'after-init-hook #'elpaca-process-queues)
-(elpaca (elpaca :host github :repo "progfolio/elpaca"))
-(setq package-enable-at-startup nil)
+(elpaca `(,@elpaca-order))
 
-;; Use-package
+;Enable use package
+;; Install use-package support
+(elpaca elpaca-use-package
+  ;; Enable :elpaca use-package keyword.
+  (elpaca-use-package-mode)
+  ;; Assume :elpaca t unless otherwise specified.
+  (setq elpaca-use-package-by-default t))
 
-(elpaca use-package (require 'use-package))
+;; Block until current queue processed.
+(elpaca-wait)
 
 ;; Nord Themes
 
-(elpaca-use-package nord-theme
+(use-package nord-theme
   :init
   (setq nord-region-highlight "frost")
   :config
   (load-theme 'nord t))
 
 ;; Org
-(elpaca-use-package org
+(use-package org
   :init
   (setq org-directory "c:/Users/Lalo/org/")
   (setq org-default-notes-file (concat org-directory "/notes.org"))
@@ -86,32 +96,32 @@
 
 ;; Magit
 
-(elpaca-use-package magit)
+(use-package magit)
 
 ;; Eglot : LSP
 
-(elpaca-use-package eglot
+(use-package eglot
   :commands eglot
   :hook (js2-mode . eglot-ensure))
 
 ;; Company-mode : Completions
 
-(elpaca-use-package company
+(use-package company
   :init
   (global-company-mode))
 
 ;; ;; PL modes
 ;; Elm
 
-(elpaca-use-package elm-mode)
+(use-package elm-mode)
 
 ;; JS
 
-(elpaca-use-package js2-mode
+(use-package js2-mode
   :mode "\\.js\\'")
 
 ;;EPUBS
-(elpaca-use-package nov
+(use-package nov
   :mode ("\\.epub\\'" . nov-mode)
   :config
   (setq nov-unzip-program (executable-find "unzip")))
