@@ -1,0 +1,15 @@
+#+title: Emacs Configuration
+#+author: Lalo Vidaurri
+
+* Emacs Configuration
+Home of my emacs configuration. I have used emacs for a while but have
+not fully learn how to use it.
+
+* Current state of things
+- Using elpaca as a package manager and use package to keep things
+  modular
+- Not much else special going on
+
+
+* TODO Figure out how to properly configure Eglot
+Configure Eglot and company for prog-modes
