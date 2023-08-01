@@ -130,6 +130,10 @@
   :mode ("\\.epub\\'" . nov-mode)
   :config
   (setq nov-unzip-program (executable-find "unzip")))
+
 ;; Start Server
 
 (server-start)
+
+;; Landing page
+(setq initial-buffer-choice "c:/Users/Lalo/org/landing.org")
